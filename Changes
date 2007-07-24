@@ -3,3 +3,5 @@ Revision history for UID
 0.20    2007-July-22
         First public release
 
+0.20.1  2007-July-24
+        Doh, encoding issues in the POD...

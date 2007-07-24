@@ -14,14 +14,13 @@ B<UID>:  Create unique identifier constants
 	
 =head1 VERSION
 
-Version 0.20 (July 22, 2007): Initial release
+Version 0.20.1 (July 24, 2007)
 
 =cut
 
-our $VERSION="0.20";
+our $VERSION="0.20.1";
 
 use strict; use warnings; use Carp;
-use utf8;
 	
 
 =head1 SYNOPSIS
@@ -40,7 +39,7 @@ use utf8;
 
 =head1 DESCRIPTION
 
-The C<UID> module lets you declare unique identifiers â€” values that you can be sure will not be coincidentally matched by some other value.
+The C<UID> module lets you declare unique identifiers E<8212> values that you can be sure will not be coincidentally matched by some other value.
 The values are not "universally" unique (UUIDs/GUIDs); they are unique for a single run of your program.
 
 Define the identifiers with "C<use UID>" followed by one or more strings for the names of the IDs to be created.
@@ -94,8 +93,8 @@ sub import
 }
 
 # We bless our refs so we can do some useful objecty stuff:
-use overload q(""), sub { "Â«$_[0][0]Â»" };		# stringifying will return the name so we can usefully print out our IDs in error messages, etc.
-use overload '${}', sub {\ "Â«$_[0][1]Â»" };		# scalarly de-reffing also has the effect of stringifying, to return the fully qualified name
+use overload q(""), sub { "«$_[0][0]»" };		# stringifying will return the name so we can usefully print out our IDs in error messages, etc.
+use overload '${}', sub {\ "«$_[0][1]»" };		# scalarly de-reffing also has the effect of stringifying, to return the fully qualified name
 
 sub compare { ref($_[0]) eq ref($_[1]) and overload::StrVal($_[0]) eq overload::StrVal($_[1]) };	# for comparing two UIDs (note that first we compare the class -- if they're different kinds of objects, they can't match; if they are, then we compare the actual "memory address" values of the underlying refs, which can only be the same if both sides are in fact the same UID
 use overload "==", \&compare;	use overload "!=", sub {not &compare};
@@ -148,15 +147,15 @@ Of course, this means that the names chosen must be valid symbols (actually, you
 if you're prepared to refer to them using circumlocutions like C<&{"a bizarre\nname"}>!).
 
 A UID overloads stringification to return a value consisting of its name when used as a string 
-(so C<use UID foo; print foo> will display "C<Â«fooÂ»>").
+(so C<use UID foo; print foo> will display "C<«foo»>").
 You can also treat it as a scalar-reference to get a string with the fully-qualified name 
-(that is, including the name of the package in which it lives: C<print ${+foo} # e.g. "Â«main::fooÂ»">).
+(that is, including the name of the package in which it lives: C<print ${+foo} # e.g. "«main::foo»">).
 
 The comparison operators C<==> and C<eq> and their negations are also overloaded for UID objects:
 comparing a UID to anything will return false unless both sides are UIDs;
 and if both are, their blessed references are compared.  
 (Not the values the references are referring to, which are simply the UIDs' names, but rather the string-values of the refs,
-which are based on their locations in memory â€”
+which are based on their locations in memory E<8212>
 since different references will always have different values, this guarantees uniqueness.)
 
 
@@ -220,7 +219,7 @@ say, its string value instead.
 			### Example of tricky object that deliberately confounds our UIDs:
 			# 	use UID foo;
 			# 	use overload q(==), sub {${$_[0]} eq ${$_[1]}}; use overload fallback=>1; 
-			# 	my $x="Â«main::fooÂ»"; 	my $o=bless \$x;
+			# 	my $x="«main::foo»"; 	my $o=bless \$x;
 			# 
 			# 	print foo==$o?"Y":"N";		# uses UID's comparison, correctly says no
 			# 	print $o==&foo ?"Y":"N"; 	# uses cheater's comparison, says yes!
