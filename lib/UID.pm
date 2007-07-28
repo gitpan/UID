@@ -5,7 +5,7 @@ package UID;
 
 =head1 NAME
 
-B<UID>:  Create unique identifier constants
+B<UID> E<8212> Create unique identifier constants
 
 =cut
 
@@ -14,11 +14,11 @@ B<UID>:  Create unique identifier constants
 	
 =head1 VERSION
 
-Version 0.20.1 (July 24, 2007)
+Version 0.21 (July 28, 2007)
 
 =cut
 
-our $VERSION="0.20.1";
+our $VERSION="0.21";
 
 use strict; use warnings; use Carp;
 	
