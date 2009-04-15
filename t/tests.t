@@ -45,19 +45,20 @@ BEGIN { use_ok "UID" }
 
 	BEGIN { use_ok "UID", 'foo'; }				# define a UID
 		
-	is foo, "«foo»", "Name";
-	cmp_ok foo, "eq", "«foo»", "Name again";
-	is ${+foo}, "«main::foo»", "Full name";
+	is foo, "«foo»", "Name";					# evaluates as string, so gets the name from foo
+	cmp_ok foo."", "eq", "«foo»", "Name again";	# force foo-as-string since "eq" is overloaded
+	is ${+foo}, "«main::foo»", "Full name";		# deref to get full name
 	isa_ok foo(), "UID", "Class";
 	is foo->[1], "main::foo", "Array deref";
 	is foo()?"Y":"N", "Y", "Bool context";
 	
-	ok foo == foo, "Self-identity (==)";		#hm, won't work with cmp_ok, "==" -- tries to do foo+0 !?
+	ok foo == foo, "Self-identity (==)";		#hm, won't work with cmp_ok, "==" -- will numify first
 	ok foo eq foo, "Self-identity (eq)";
-	
-	isn't foo, "foo", "Non-identity";
-	is foo, "«foo»", "Non-identity too";
 	deeper foo, foo, "Deep identity";
+	
+	isn't foo, "foo", "Non-identity";			# again, compares string-overloaded value
+	cmp_ok foo, ne => "foo", "Non-identity too";
+	cmp_ok foo, ne => "«foo»", "Non-identity still";
 	
 	my $f=foo;
 	is $f, foo, "Copy";
@@ -70,10 +71,14 @@ BEGIN { use_ok "UID" }
 	deeper BAR, BAR, "Deep identity, bar none";
 	deepless foo, BAR, "Deep misidentity";
 	
-	is BAR, "«BAR»", "Other name";
-	is BAR, BAR, "Other identity";
-	isn't foo, BAR, "Different UIDs";
-	isn't BAR, BAZ, "Other different UIDs";
+	is BAR, "«BAR»", "String name";
+	is BAR, BAR, "String-val identity";
+	isn't foo, BAR, "Different UIDs";			# meh, as strings!
+	isn't BAR, BAZ, "Other different UIDs";		# meh, as strings!
+	cmp_ok BAR, eq=> BAR,  "Matching UIDs";
+	cmp_ok foo, ne=> BAR,  "Different UIDs";
+	cmp_ok BAR, ne=> BAZ,  "Other different UIDs";
+	ok QUX==QUX, "Other other match";
 	ok foo!=QUX, "Other other difference";
 	
 #	#hm, test for errors?
@@ -83,7 +88,7 @@ BEGIN { use_ok "UID" }
 		
 
 package Other;		# Repeat intro stuff for new namespace:
-	use strict; use warnings; use utf8;
+	use strict; use warnings;
 	use Test::More;	# no plan because we already specified one in this file
 	use utf8; #because of our «,»
 

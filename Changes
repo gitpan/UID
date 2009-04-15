@@ -9,3 +9,5 @@ Revision history for UID
 0.21    2007-July-28
         Hm, CPAN doesn't like that version number!
 
+0.23	2009-April-15
+		Fix up broken test
