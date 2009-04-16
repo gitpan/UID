@@ -14,11 +14,11 @@ B<UID> E<8212> Create unique identifier constants
 	
 =head1 VERSION
 
-Version 0.23 (April 15, 2009)
+Version 0.24 (April 16, 2009)
 
 =cut
 
-our $VERSION="0.23";
+our $VERSION="0.24";
 
 use strict; use warnings; use Carp; use utf8;
 	

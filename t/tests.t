@@ -46,7 +46,7 @@ BEGIN { use_ok "UID" }
 	BEGIN { use_ok "UID", 'foo'; }				# define a UID
 		
 	is foo, "«foo»", "Name";					# evaluates as string, so gets the name from foo
-	cmp_ok foo."", "eq", "«foo»", "Name again";	# force foo-as-string since "eq" is overloaded
+	ok foo."" eq "«foo»", "Name again";	 		# force foo-as-string since "eq" is overloaded
 	is ${+foo}, "«main::foo»", "Full name";		# deref to get full name
 	isa_ok foo(), "UID", "Class";
 	is foo->[1], "main::foo", "Array deref";
@@ -57,8 +57,8 @@ BEGIN { use_ok "UID" }
 	deeper foo, foo, "Deep identity";
 	
 	isn't foo, "foo", "Non-identity";			# again, compares string-overloaded value
-	cmp_ok foo, ne => "foo", "Non-identity too";
-	cmp_ok foo, ne => "«foo»", "Non-identity still";
+	ok foo ne "foo", "Non-identity too";
+	ok foo ne "«foo»", "Non-identity still";
 	
 	my $f=foo;
 	is $f, foo, "Copy";
@@ -75,8 +75,8 @@ BEGIN { use_ok "UID" }
 	is BAR, BAR, "String-val identity";
 	isn't foo, BAR, "Different UIDs";			# meh, as strings!
 	isn't BAR, BAZ, "Other different UIDs";		# meh, as strings!
-	cmp_ok BAR, eq=> BAR,  "Matching UIDs";
-	cmp_ok foo, ne=> BAR,  "Different UIDs";
+	ok BAR eq BAR,  "Matching UIDs";
+	ok foo ne BAR,  "Different UIDs";
 	cmp_ok BAR, ne=> BAZ,  "Other different UIDs";
 	ok QUX==QUX, "Other other match";
 	ok foo!=QUX, "Other other difference";

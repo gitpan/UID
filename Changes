@@ -11,3 +11,6 @@ Revision history for UID
 
 0.23	2009-April-15
 		Fix up broken test
+
+0.24	2009-April-16
+		Fix test again (possible difference between Test::More from v.78 to v.86?)
